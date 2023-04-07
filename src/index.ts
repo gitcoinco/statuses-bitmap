@@ -71,6 +71,23 @@ class StatusesBitmap {
     return this.statuses[Number(value)];
   }
 
+  public getRow(rowIndex: bigint): bigint {
+    return this.rows[rowIndex.toString()] ?? BigInt(0);
+  }
+
+  public setRow(rowIndex: bigint, value: bigint) {
+    this.rows[rowIndex.toString()] = value;
+
+    const height = rowIndex + BigInt(1);
+    if (height > this._height) {
+      this._height = height;
+    }
+  }
+
+  public getRows() {
+    return this.rows;
+  }
+
   public inspectRow(rowIndex: bigint): string {
     const row = this.rows[rowIndex.toString()] ?? BigInt(0);
     const buf: Array<string> = [];
@@ -91,23 +108,6 @@ class StatusesBitmap {
     }
 
     return buf.join("\n");
-  }
-
-  public getRow(rowIndex: bigint): bigint {
-    return this.rows[rowIndex.toString()] ?? BigInt(0);
-  }
-
-  public setRow(rowIndex: bigint, value: bigint) {
-    this.rows[rowIndex.toString()] = value;
-
-    const height = rowIndex + BigInt(1);
-    if (height > this._height) {
-      this._height = height;
-    }
-  }
-
-  public getRows() {
-    return this.rows;
   }
 }
 
