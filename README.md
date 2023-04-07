@@ -3,7 +3,7 @@
 The `StatusesBitmap` class is a Typescript/Javascript implementation of a bitmap (or bit array) used to represent a set of statuses.
 
 A bitmap is a data structure that uses a sequence of bits to represent the state of some set of objects.
-In the case of the `StatusesBitmap`, each bit represents a single status in a given set of statuses.
+In the case of the `StatusesBitmap`, each bit (or group of bits) represents a single status in a given set of statuses.
 The set of statuses can be of any size, and each status can be represented by a variable number of bits.
 
 The `StatusesBitmap` class provides methods to set and get the status of a given index, get the status as a string,
