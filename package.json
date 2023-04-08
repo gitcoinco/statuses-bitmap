@@ -10,7 +10,8 @@
     "lint": "eslint src",
     "test": "jest",
     "test:watch": "jest --watch",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "ISC",
