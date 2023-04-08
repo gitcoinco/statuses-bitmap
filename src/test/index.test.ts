@@ -126,21 +126,6 @@ describe("StatusesBitmap", () => {
     expect(b.inspectRow(BigInt(3))).toEqual("00 00 10 00");
     expect(b.inspectRow(BigInt(4))).toEqual("00 00 00 10");
     expect(b.inspectRow(BigInt(5))).toEqual("00 01 10 11");
-
-    const statuses = ["pending", "accepted", "rejected", "canceled"];
-    const bitmap = new StatusesBitmap(BigInt(8), BigInt(2), statuses);
-
-    bitmap.setStatus(BigInt(0), "pending"); // sets the status of the 1st item to "pending"
-    bitmap.setStatus(BigInt(1), "accepted"); // sets the status of the 2nd item to "accepted"
-    bitmap.setStatus(BigInt(2), "rejected"); // sets the status of the 3rd item to "rejected"
-    bitmap.setStatus(BigInt(3), "canceled"); // sets the status of the 4th item to "canceled"
-    bitmap.setStatus(BigInt(4), "accepted"); // sets the status of the 5th item to "accepted"
-    bitmap.setStatus(BigInt(5), "rejected"); // sets the status of the 6th item to "rejected"
-
-    bitmap.setStatus(BigInt(9), "accepted"); // sets the status of the 10th item to "accepted"
-    bitmap.setStatus(BigInt(15), "rejected"); // sets the status of the 16th item to "rejected"
-
-    console.log(bitmap.inspect());
   });
 
   test("inspect", () => {
