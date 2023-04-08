@@ -111,12 +111,16 @@ describe("StatusesBitmap", () => {
   });
 
   test("size", () => {
-    expect(b.width()).toEqual(BigInt(8));
-    expect(b.height()).toEqual(BigInt(6));
+    expect(b.width).toEqual(BigInt(8));
+    expect(b.height).toEqual(BigInt(6));
 
     b.setRow(BigInt(20), BigInt(1));
 
-    expect(b.height()).toEqual(BigInt(21));
+    expect(b.height).toEqual(BigInt(21));
+  });
+
+  test("itemsPerRow", () => {
+    expect(b.itemsPerRow).toEqual(BigInt(4));
   });
 
   test("inspectRow", () => {
