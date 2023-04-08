@@ -101,7 +101,7 @@ class StatusesBitmap {
   }
 
   public inspect(): string {
-    let buf: Array<string> = [];
+    const buf: Array<string> = [];
 
     for (let i = BigInt(0); i < this._height; i++) {
       buf.push(this.inspectRow(i));
