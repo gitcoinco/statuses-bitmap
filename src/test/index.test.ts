@@ -35,7 +35,7 @@ describe("StatusesBitmap", () => {
     expect(b.getRow(BigInt(5))).toEqual(BigInt(27));
   });
 
-  test("getRow", () => {
+  test("setRow", () => {
     expect(b.getRow(BigInt(0))).toEqual(BigInt(228));
     expect(b.getRow(BigInt(1))).toEqual(BigInt(192));
 
