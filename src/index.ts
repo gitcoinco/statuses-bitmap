@@ -3,25 +3,19 @@ class StatusesBitmap {
   private _height: bigint;
   private bitsPerStatus: bigint;
   private maxStatus: bigint;
-  private statuses: Array<string>;
   private _itemsPerRow: bigint;
   private rows: { [rowIndex: string]: bigint };
 
-  constructor(width: bigint, bitsPerStatus: bigint, statuses: Array<string>) {
+  constructor(width: bigint, bitsPerStatus: bigint) {
     if (width % bitsPerStatus !== BigInt(0)) {
       throw new Error("width must be divisible by bitsPerStatus");
     }
 
     this.maxStatus = bitsPerStatus ** BigInt(2) - BigInt(1);
 
-    if (BigInt(statuses.length) - BigInt(1) > this.maxStatus) {
-      throw new Error(`too many statuses for ${bitsPerStatus} bits`);
-    }
-
     this._width = width;
     this._height = BigInt(0);
     this.bitsPerStatus = bitsPerStatus;
-    this.statuses = statuses;
     this._itemsPerRow = width / this.bitsPerStatus;
     this.rows = {};
   }
@@ -38,9 +32,14 @@ class StatusesBitmap {
     return this._height;
   }
 
-  public setStatus(index: bigint, status: string) {
-    const value = BigInt(this.statuses.indexOf(status));
-    if (value < BigInt(0)) {
+  public setStatus(index: bigint, status: number) {
+    const value = BigInt(status);
+
+    if (index < BigInt(0)) {
+      throw new Error("invalid index");
+    }
+
+    if (value < BigInt(0) || value > this.maxStatus) {
       throw new Error("invalid status");
     }
 
@@ -61,18 +60,13 @@ class StatusesBitmap {
     }
   }
 
-  public getStatusNumber(index: bigint): bigint {
+  public getStatus(index: bigint): number {
     const rowIndex = index / this._itemsPerRow;
     const colIndex = (index % this._itemsPerRow) * this.bitsPerStatus;
     const row = this.rows[rowIndex.toString()] ?? BigInt(0);
     const value = (row >> colIndex) & this.maxStatus;
 
-    return value;
-  }
-
-  public getStatus(index: bigint): string | undefined {
-    const value = this.getStatusNumber(index);
-    return this.statuses[Number(value)];
+    return Number(value);
   }
 
   public getRow(rowIndex: bigint): bigint {
