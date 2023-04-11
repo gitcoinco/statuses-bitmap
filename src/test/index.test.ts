@@ -1,29 +1,40 @@
 import StatusesBitmap from "../index.js";
 
+enum Status {
+  Pending = 0,
+  Accepted,
+  Rejected,
+  Canceled,
+}
+
 describe("StatusesBitmap", () => {
   let b: StatusesBitmap;
   beforeEach(() => {
-    b = new StatusesBitmap(BigInt(8), BigInt(2), [
-      "pending",
-      "accepted",
-      "rejected",
-      "canceled",
-    ]);
+    b = new StatusesBitmap(BigInt(8), BigInt(2));
 
-    b.setStatus(BigInt(0), "pending");
-    b.setStatus(BigInt(1), "accepted");
-    b.setStatus(BigInt(2), "rejected");
-    b.setStatus(BigInt(3), "canceled");
+    b.setStatus(BigInt(0), Status.Pending);
+    b.setStatus(BigInt(1), Status.Accepted);
+    b.setStatus(BigInt(2), Status.Rejected);
+    b.setStatus(BigInt(3), Status.Canceled);
 
-    b.setStatus(BigInt(7), "canceled");
-    b.setStatus(BigInt(10), "rejected");
-    b.setStatus(BigInt(13), "rejected");
-    b.setStatus(BigInt(16), "rejected");
+    b.setStatus(BigInt(7), Status.Canceled);
+    b.setStatus(BigInt(10), Status.Rejected);
+    b.setStatus(BigInt(13), Status.Rejected);
+    b.setStatus(BigInt(16), Status.Rejected);
 
-    b.setStatus(BigInt(20), "canceled");
-    b.setStatus(BigInt(21), "rejected");
-    b.setStatus(BigInt(22), "accepted");
-    b.setStatus(BigInt(23), "pending");
+    b.setStatus(BigInt(20), Status.Canceled);
+    b.setStatus(BigInt(21), Status.Rejected);
+    b.setStatus(BigInt(22), Status.Accepted);
+    b.setStatus(BigInt(23), Status.Pending);
+  });
+
+  test("setRow with bad index", () => {
+    expect(() => b.setStatus(BigInt(-1), 1)).toThrow("invalid index");
+  });
+
+  test("setRow with bad status", () => {
+    expect(() => b.setStatus(BigInt(0), -1)).toThrow("invalid status");
+    expect(() => b.setStatus(BigInt(0), 9999)).toThrow("invalid status");
   });
 
   test("getRow", () => {
@@ -46,68 +57,36 @@ describe("StatusesBitmap", () => {
     expect(b.getRow(BigInt(1))).toEqual(BigInt(20));
   });
 
-  test("getStatusNumber", () => {
-    expect(b.getStatusNumber(BigInt(0))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(1))).toEqual(BigInt(1));
-    expect(b.getStatusNumber(BigInt(2))).toEqual(BigInt(2));
-    expect(b.getStatusNumber(BigInt(3))).toEqual(BigInt(3));
-
-    expect(b.getStatusNumber(BigInt(4))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(5))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(6))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(7))).toEqual(BigInt(3));
-
-    expect(b.getStatusNumber(BigInt(8))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(9))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(10))).toEqual(BigInt(2));
-    expect(b.getStatusNumber(BigInt(11))).toEqual(BigInt(0));
-
-    expect(b.getStatusNumber(BigInt(12))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(13))).toEqual(BigInt(2));
-    expect(b.getStatusNumber(BigInt(14))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(15))).toEqual(BigInt(0));
-
-    expect(b.getStatusNumber(BigInt(16))).toEqual(BigInt(2));
-    expect(b.getStatusNumber(BigInt(17))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(18))).toEqual(BigInt(0));
-    expect(b.getStatusNumber(BigInt(19))).toEqual(BigInt(0));
-
-    expect(b.getStatusNumber(BigInt(20))).toEqual(BigInt(3));
-    expect(b.getStatusNumber(BigInt(21))).toEqual(BigInt(2));
-    expect(b.getStatusNumber(BigInt(22))).toEqual(BigInt(1));
-    expect(b.getStatusNumber(BigInt(23))).toEqual(BigInt(0));
-  });
-
   test("getStatus", () => {
-    expect(b.getStatus(BigInt(0))).toEqual("pending");
-    expect(b.getStatus(BigInt(1))).toEqual("accepted");
-    expect(b.getStatus(BigInt(2))).toEqual("rejected");
-    expect(b.getStatus(BigInt(3))).toEqual("canceled");
+    expect(b.getStatus(BigInt(0))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(1))).toEqual(Status.Accepted);
+    expect(b.getStatus(BigInt(2))).toEqual(Status.Rejected);
+    expect(b.getStatus(BigInt(3))).toEqual(Status.Canceled);
 
-    expect(b.getStatus(BigInt(4))).toEqual("pending");
-    expect(b.getStatus(BigInt(5))).toEqual("pending");
-    expect(b.getStatus(BigInt(6))).toEqual("pending");
-    expect(b.getStatus(BigInt(7))).toEqual("canceled");
+    expect(b.getStatus(BigInt(4))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(5))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(6))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(7))).toEqual(Status.Canceled);
 
-    expect(b.getStatus(BigInt(8))).toEqual("pending");
-    expect(b.getStatus(BigInt(9))).toEqual("pending");
-    expect(b.getStatus(BigInt(10))).toEqual("rejected");
-    expect(b.getStatus(BigInt(11))).toEqual("pending");
+    expect(b.getStatus(BigInt(8))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(9))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(10))).toEqual(Status.Rejected);
+    expect(b.getStatus(BigInt(11))).toEqual(Status.Pending);
 
-    expect(b.getStatus(BigInt(12))).toEqual("pending");
-    expect(b.getStatus(BigInt(13))).toEqual("rejected");
-    expect(b.getStatus(BigInt(14))).toEqual("pending");
-    expect(b.getStatus(BigInt(15))).toEqual("pending");
+    expect(b.getStatus(BigInt(12))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(13))).toEqual(Status.Rejected);
+    expect(b.getStatus(BigInt(14))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(15))).toEqual(Status.Pending);
 
-    expect(b.getStatus(BigInt(16))).toEqual("rejected");
-    expect(b.getStatus(BigInt(17))).toEqual("pending");
-    expect(b.getStatus(BigInt(18))).toEqual("pending");
-    expect(b.getStatus(BigInt(19))).toEqual("pending");
+    expect(b.getStatus(BigInt(16))).toEqual(Status.Rejected);
+    expect(b.getStatus(BigInt(17))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(18))).toEqual(Status.Pending);
+    expect(b.getStatus(BigInt(19))).toEqual(Status.Pending);
 
-    expect(b.getStatus(BigInt(20))).toEqual("canceled");
-    expect(b.getStatus(BigInt(21))).toEqual("rejected");
-    expect(b.getStatus(BigInt(22))).toEqual("accepted");
-    expect(b.getStatus(BigInt(23))).toEqual("pending");
+    expect(b.getStatus(BigInt(20))).toEqual(Status.Canceled);
+    expect(b.getStatus(BigInt(21))).toEqual(Status.Rejected);
+    expect(b.getStatus(BigInt(22))).toEqual(Status.Accepted);
+    expect(b.getStatus(BigInt(23))).toEqual(Status.Pending);
   });
 
   test("size", () => {

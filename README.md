@@ -24,21 +24,26 @@ npm install git+https://github.com/gitcoinco/statuses-bitmap.git
 ```typescript
 import StatusesBitmap from 'statuses-bitmap';
 
-const statuses = ["pending", "accepted", "rejected", "canceled"];
-const bitmap = new StatusesBitmap(BigInt(8), BigInt(2), statuses);
+enum Status {
+  Pending = 0,
+  Accepted,
+  Rejected,
+  Canceled,
+}
 
-bitmap.setStatus(BigInt(0), "pending");  // sets the status of the 1st item to "pending"
-bitmap.setStatus(BigInt(1), "accepted"); // sets the status of the 2nd item to "accepted"
-bitmap.setStatus(BigInt(2), "rejected"); // sets the status of the 3rd item to "rejected"
-bitmap.setStatus(BigInt(3), "canceled"); // sets the status of the 4th item to "canceled"
-bitmap.setStatus(BigInt(4), "accepted"); // sets the status of the 5th item to "accepted"
-bitmap.setStatus(BigInt(5), "rejected"); // sets the status of the 6th item to "rejected"
+const bitmap = new StatusesBitmap(BigInt(8), BigInt(2));
 
-bitmap.setStatus(BigInt(9), "accepted"); // sets the status of the 10th item to "accepted"
-bitmap.setStatus(BigInt(15), "rejected"); // sets the status of the 16th item to "rejected"
+bitmap.setStatus(BigInt(0), Status.Pending); // sets the status of the 1st item to "pending"
+bitmap.setStatus(BigInt(1), Status.Accepted); // sets the status of the 2nd item to "accepted"
+bitmap.setStatus(BigInt(2), Status.Rejected); // sets the status of the 3rd item to "rejected"
+bitmap.setStatus(BigInt(3), Status.Canceled); // sets the status of the 4th item to "canceled"
+bitmap.setStatus(BigInt(4), Status.Accepted); // sets the status of the 5th item to "accepted"
+bitmap.setStatus(BigInt(5), Status.Rejected); // sets the status of the 6th item to "rejected"
+
+bitmap.setStatus(BigInt(9), Status.Accepted); // sets the status of the 10th item to "accepted"
+bitmap.setStatus(BigInt(15), Status.Rejected); // sets the status of the 16th item to "rejected"
 
 console.log(bitmap.inspect());
-
 ```
 
 This will output:
