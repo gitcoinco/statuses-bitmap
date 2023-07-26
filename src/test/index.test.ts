@@ -7,6 +7,11 @@ enum Status {
   Canceled,
 }
 
+enum Status1Bit {
+  False = 0,
+  True,
+}
+
 describe("StatusesBitmap", () => {
   let b: StatusesBitmap;
   beforeEach(() => {
@@ -119,6 +124,77 @@ describe("StatusesBitmap", () => {
 00 00 10 00
 00 00 00 10
 00 01 10 11`;
+
+    expect("\n" + b.inspect()).toEqual(expected);
+  });
+});
+
+describe("StatusesBitmap 1bit", () => {
+  let b: StatusesBitmap;
+  beforeEach(() => {
+    b = new StatusesBitmap(BigInt(2), BigInt(1));
+
+    b.setStatus(BigInt(0), Status1Bit.False);
+    b.setStatus(BigInt(1), Status1Bit.True);
+
+    b.setStatus(BigInt(2), Status1Bit.True);
+    b.setStatus(BigInt(3), Status1Bit.False);
+  });
+
+  test("setRow with bad index", () => {
+    expect(() => b.setStatus(BigInt(-1), 1)).toThrow("invalid index");
+  });
+
+  test("setRow with bad status", () => {
+    expect(() => b.setStatus(BigInt(0), -1)).toThrow("invalid status");
+    expect(() => b.setStatus(BigInt(0), 9999)).toThrow("invalid status");
+  });
+
+  test("getRow", () => {
+    expect(b.getRow(BigInt(0))).toEqual(BigInt(2));
+    expect(b.getRow(BigInt(1))).toEqual(BigInt(1));
+  });
+
+  test("setRow", () => {
+    expect(b.getRow(BigInt(0))).toEqual(BigInt(2));
+    expect(b.getRow(BigInt(1))).toEqual(BigInt(1));
+
+    b.setRow(BigInt(0), BigInt(1));
+    b.setRow(BigInt(1), BigInt(2));
+
+    expect(b.getRow(BigInt(0))).toEqual(BigInt(1));
+    expect(b.getRow(BigInt(1))).toEqual(BigInt(2));
+  });
+
+  test("getStatus", () => {
+    expect(b.getStatus(BigInt(0))).toEqual(Status1Bit.False);
+    expect(b.getStatus(BigInt(1))).toEqual(Status1Bit.True);
+    expect(b.getStatus(BigInt(2))).toEqual(Status1Bit.True);
+    expect(b.getStatus(BigInt(3))).toEqual(Status1Bit.False);
+  });
+
+  test("size", () => {
+    expect(b.width).toEqual(BigInt(2));
+    expect(b.height).toEqual(BigInt(2));
+
+    b.setRow(BigInt(20), BigInt(1));
+
+    expect(b.height).toEqual(BigInt(21));
+  });
+
+  test("itemsPerRow", () => {
+    expect(b.itemsPerRow).toEqual(BigInt(2));
+  });
+
+  test("inspectRow", () => {
+    expect(b.inspectRow(BigInt(0))).toEqual("1 0");
+    expect(b.inspectRow(BigInt(1))).toEqual("0 1");
+  });
+
+  test("inspect", () => {
+    const expected = `
+1 0
+0 1`;
 
     expect("\n" + b.inspect()).toEqual(expected);
   });

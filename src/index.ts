@@ -11,7 +11,9 @@ class StatusesBitmap {
       throw new Error("width must be divisible by bitsPerStatus");
     }
 
-    this.maxStatus = bitsPerStatus ** BigInt(2) - BigInt(1);
+    this.maxStatus = bitsPerStatus === BigInt(1)
+      ? BigInt(1)
+      : bitsPerStatus ** BigInt(2) - BigInt(1);
 
     this._width = width;
     this._height = BigInt(0);
