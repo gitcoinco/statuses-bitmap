@@ -28,7 +28,7 @@ describe("StatusesBitmap", () => {
     b.setStatus(BigInt(23), Status.Pending);
   });
 
-  test("test", () => {
+  test("maxStatus", () => {
     const scenarios = [
       { bitsPerRow: 10, bitsPerStatus: 1, expectedMaxStatus: 1 },
       { bitsPerRow: 10, bitsPerStatus: 2, expectedMaxStatus: 3 },
