@@ -9,9 +9,9 @@ enum Status {
 
 describe("StatusesBitmap", () => {
   let b: StatusesBitmap;
+
   beforeEach(() => {
     b = new StatusesBitmap(BigInt(8), BigInt(2));
-
     b.setStatus(BigInt(0), Status.Pending);
     b.setStatus(BigInt(1), Status.Accepted);
     b.setStatus(BigInt(2), Status.Rejected);
@@ -26,6 +26,26 @@ describe("StatusesBitmap", () => {
     b.setStatus(BigInt(21), Status.Rejected);
     b.setStatus(BigInt(22), Status.Accepted);
     b.setStatus(BigInt(23), Status.Pending);
+  });
+
+  test("maxStatus", () => {
+    const scenarios = [
+      { bitsPerRow: 10, bitsPerStatus: 1, expectedMaxStatus: 1 },
+      { bitsPerRow: 10, bitsPerStatus: 2, expectedMaxStatus: 3 },
+      { bitsPerRow: 12, bitsPerStatus: 3, expectedMaxStatus: 7 },
+      { bitsPerRow: 16, bitsPerStatus: 4, expectedMaxStatus: 15 },
+      { bitsPerRow: 18, bitsPerStatus: 6, expectedMaxStatus: 63 },
+      { bitsPerRow: 21, bitsPerStatus: 7, expectedMaxStatus: 127 },
+      { bitsPerRow: 24, bitsPerStatus: 8, expectedMaxStatus: 255 },
+    ];
+
+    scenarios.forEach((s) => {
+      const b = new StatusesBitmap(
+        BigInt(s.bitsPerRow),
+        BigInt(s.bitsPerStatus)
+      );
+      expect(b.maxStatus).toEqual(BigInt(s.expectedMaxStatus));
+    });
   });
 
   test("setRow with bad index", () => {
