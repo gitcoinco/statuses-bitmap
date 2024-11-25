@@ -2,7 +2,7 @@ class StatusesBitmap {
   private _width: bigint;
   private _height: bigint;
   private bitsPerStatus: bigint;
-  private maxStatus: bigint;
+  private _maxStatus: bigint;
   private _itemsPerRow: bigint;
   private rows: { [rowIndex: string]: bigint };
 
@@ -11,13 +11,17 @@ class StatusesBitmap {
       throw new Error("width must be divisible by bitsPerStatus");
     }
 
-    this.maxStatus = bitsPerStatus ** BigInt(2) - BigInt(1);
+    this._maxStatus = BigInt(2) ** bitsPerStatus - BigInt(1);
 
     this._width = width;
     this._height = BigInt(0);
     this.bitsPerStatus = bitsPerStatus;
     this._itemsPerRow = width / this.bitsPerStatus;
     this.rows = {};
+  }
+
+  get maxStatus() {
+    return this._maxStatus;
   }
 
   get itemsPerRow() {
@@ -39,7 +43,7 @@ class StatusesBitmap {
       throw new Error("invalid index");
     }
 
-    if (value < BigInt(0) || value > this.maxStatus) {
+    if (value < BigInt(0) || value > this._maxStatus) {
       throw new Error("invalid status");
     }
 
@@ -48,7 +52,7 @@ class StatusesBitmap {
 
     const currentRowValue = this.rows[rowIndex.toString()] ?? BigInt(0);
 
-    const mask: bigint = this.maxStatus << colIndex;
+    const mask: bigint = this._maxStatus << colIndex;
     const cleared: bigint = currentRowValue & ~mask;
     const newRowValue = cleared | (value << colIndex);
 
@@ -64,7 +68,7 @@ class StatusesBitmap {
     const rowIndex = index / this._itemsPerRow;
     const colIndex = (index % this._itemsPerRow) * this.bitsPerStatus;
     const row = this.rows[rowIndex.toString()] ?? BigInt(0);
-    const value = (row >> colIndex) & this.maxStatus;
+    const value = (row >> colIndex) & this._maxStatus;
 
     return Number(value);
   }
@@ -91,7 +95,7 @@ class StatusesBitmap {
     const buf: Array<string> = [];
 
     for (let j = BigInt(0); j < this._itemsPerRow; j++) {
-      const value = (row >> (j * this.bitsPerStatus)) & this.maxStatus;
+      const value = (row >> (j * this.bitsPerStatus)) & this._maxStatus;
       buf.push(value.toString(2).padStart(Number(this.bitsPerStatus), "0"));
     }
 
